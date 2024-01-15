@@ -24,10 +24,6 @@ Bag class is nothing, It's a just manipulation of an array.
 
 Heap memory, often referred to simply as the "heap," is a region of a computer's memory that is used for dynamic memory allocation. Unlike the stack, which is used for function call management and local variables, the heap is a more flexible area of memory that can be used to allocate memory at runtime. The heap allows programs to allocate memory for variables whose size is not known until the program is running or for data structures like arrays and linked lists.
 
-## `Container_Class`  
-
-**What is a container class?**  
-
 ---
 
 In bag class we just store an array of integers. In that array we can insert, delete, update values/integers.  
