@@ -457,3 +457,76 @@ int a;
 int b;
 
 ```
+
+let's say we want to declare an array in dynamic memory(heap), so use new operator and then store that address into an integer type pointer
+
+```cpp
+int *a_ptr = new int[20];
+int_ptr[2] = 20;
+// cout << *a_ptr[2]; // was not correct
+cout << a_ptr[2];
+
+cout << *(a_ptr + 2); // same
+
+// Now we can delete this complete array
+delete a_ptr;
+```
+
+**How the compiler store 20 in index2? In other word how compiler reach to the index[2]?** Here in case of an array the new operator will return the address of first array element. So first the compiler check is there any variable in MVT, if there is then due to astrict(dereference operator) it will check the value at that memory address. So here the value is address of first index of array in heap, So firstly it will reach to the index of first index, But it's still not terminate because after that (*a_ptr) there is a square brackets around the 2. So here compiler add that 2 with the value of a_ptr, which is remember address of first index of array. let say 901 is address of first index of array, so it wll be like this: 901 + 2, So the compiler change this statement \***int_ptr[2] to *(901 + 2)** This plus operator is not a normal plus but it's an overloaded plus. So here it'll add two time 4 bytes as it's an integer type to go second index.
+
+---
+
+`Lecture #14`
+
+```cpp
+int size; // for initial size of array.
+int *data_ptr; // to store address of a dynamic array
+int used=0; // already used array size
+
+cout << "Please enter size of an array in dynamic memory" << endl;
+cin >> size;
+data_ptr = new int[size]; 
+// new will reserve a memory size of this array in heap, and return the address of fist index
+
+// simply fill with random numbers
+for(int i=0; i<size; i++){
+  data_ptr[i]=1+rand()%100; // generate a random number between 1 and 100. stdlib.h include 
+  used++;
+}
+
+// log
+for(int i=0; i<used; i++){
+  cout<<data_ptr[i]; // now these numbers comes from dynamic memory.
+}
+
+// At this point we realize that we need an array of size 10, but when initializing the size of the array we gave 5. To do that...
+// 1. Create Temporary memory in heap
+// 2. Copy actual value in this temporary variable.
+// 3. Delete Actual Array
+// 4. Store temp_ptr's value into data_ptr
+
+// Create Temp memory
+int *temp_ptr=new int[10];
+
+// To copy values from data array to temp
+for(int i = 0; i < used; i++){
+  temp_ptr[i] = data_ptr[i];
+}
+
+// Delete data array
+delete [] data_ptr; // now deleted. to delete array use []
+
+data_ptr=temp_ptr;
+
+```
+
+To increase the size of the array during run time, we will create a new array in heap as a temporary memory location. then we will store the actual data from our data array to the temp array at corresponding index. code ⤴. Now here we have two dynamic memory, one where temp is pointing and anther where data is pointing. Now after copying we delete the data array, because it's smaller than our requirement.  
+Right now our dta_ptr is free, and temp_ptr is pointing the array which is 10 array size. Now if we store the value of temp_ptr(which is 1st-index of large array) into data_ptr(which is free, right now). Then data_ptr will also start pointing at same memory address where temp_pts is pointing.
+
+`These we can do with normal array as well, i-e increase the size of array by using temporary array. **So what is difference that with this?**`  
+The difference is that during execution time we cannot free smaller array. The space for that array will reserve, until that static array goes out of scope.
+
+*`Remember:` Delete means we're not deleting the reserved RAM memory, But we basically free the reserved memory, to utilize by other processes.*
+
+---
+
