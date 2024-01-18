@@ -500,33 +500,49 @@ for(int i=0; i<used; i++){
 }
 
 // At this point we realize that we need an array of size 10, but when initializing the size of the array we gave 5. To do that...
-// 1. Create Temporary memory in heap
-// 2. Copy actual value in this temporary variable.
-// 3. Delete Actual Array
-// 4. Store temp_ptr's value into data_ptr
 
-// Create Temp memory
+// 1) Create Temp memory
 int *temp_ptr=new int[10];
 
-// To copy values from data array to temp
+// 2) To copy values from data array to temp
 for(int i = 0; i < used; i++){
   temp_ptr[i] = data_ptr[i];
 }
 
-// Delete data array
+// 3) Delete data array
 delete [] data_ptr; // now deleted. to delete array use []
 
+// 4) Assign temp_ptr value to data_ptr
 data_ptr=temp_ptr;
 
 ```
 
-To increase the size of the array during run time, we will create a new array in heap as a temporary memory location. then we will store the actual data from our data array to the temp array at corresponding index. code ⤴. Now here we have two dynamic memory, one where temp is pointing and anther where data is pointing. Now after copying we delete the data array, because it's smaller than our requirement.  
+To increase the size of an array during run time we do these steps. [code⤴]
+
+1. Create Temporary memory in heap
+2. Copy actual value in this temporary variable.
+3. Delete Actual Array
+4. Store temp_ptr's value into data_ptr
+
+`Explanation:`  
+To increase the size of the array during run time, we will create a new array in heap as a temporary memory location. then we will store the actual data from our data array to the temp array at corresponding index. code ⤴. Now here we have two dynamic memory, one where temp is pointing and anther where data is pointing. Now after copying we delete the data array, because it's smaller than our requirement. To delete we use [] so it'll delete all the array indexes from heap. now data_ptr is pointing to somewhere in the heap, but there nothing exists, because we deleted. so there will be some garbage value.  
 Right now our dta_ptr is free, and temp_ptr is pointing the array which is 10 array size. Now if we store the value of temp_ptr(which is 1st-index of large array) into data_ptr(which is free, right now). Then data_ptr will also start pointing at same memory address where temp_pts is pointing.
 
-`These we can do with normal array as well, i-e increase the size of array by using temporary array. **So what is difference that with this?**`  
+`These we can do with normal array as well, i-e increase the size of array by using temporary array. So what is difference that with this?`  
 The difference is that during execution time we cannot free smaller array. The space for that array will reserve, until that static array goes out of scope.
 
 *`Remember:` Delete means we're not deleting the reserved RAM memory, But we basically free the reserved memory, to utilize by other processes.*
 
----
+Here in our Program there is a logical mistake, That is, **What happen if our static variable(data_ptr), where we stored address of dynamic memory, goes out of scope?** In this case the compiler will also delete the size variable, used, and also *data_ptr. The big problem here is we've a dynamic memory reserved in heap, but we cannot access it or even delete it. It'll reserved un till unless our system RAM/Pc restart.
 
+So we always delete our dynamic memory before program termination.⤵
+
+```cpp
+delete []data_ptr;
+
+return 0;
+```
+
+***`Dynamic memory always depends upon our system's RAM.`***
+
+---
