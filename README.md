@@ -10,6 +10,8 @@ Sir Mohsin Ansari
 1. [Bag_Class](#bag_class)
 2. [Heap_Memory](#heap_memory)
 3. [Operator_Overloading](#operator_overloading)
+4. [Dynamic_Memory](#dynamic_memory)
+5. [Dynamic_Binding_And_Static_Binding](#dynamic_binding_and_static_binding)
 
 ---
 
@@ -251,7 +253,7 @@ bag b3 = b + b2; // For now Error // before overloading
 
 ---
 
-## `Pointer`
+## `Dynamic_Memory`
 
 Now we want this bag to be dynamic. Bag should have a dynamic memory size. It should not full unless our system memory(RAM) not full. We also want if we remove some elements from this bag, so in array, then the reserved memory should also remove. Till now it's not possible, because this memory for bag is reserving by the compiler, which we called **static memory**. So we move to the **pointers** and **dynamic memory**.
 
@@ -269,23 +271,25 @@ Now we want this bag to be dynamic. Bag should have a dynamic memory size. It sh
 
 ---
 
-### `Concepts with Dynamic Memory`
+### `Concepts Pre-Requisites to Dynamic Memory`
 
-1. Pointers
-2. Static Memory VS Heap Memory
-3. Shallow copy VS Deep copy
+1. [Pointers](#pointer)
+2. [Static_Memory_VS_Heap_Memory](#static_memory_vs_heap_memory)
+3. [Shallow_Copy_VS_Deep_Copy](#shallow_copy_vs_deep_copy)
     1. Copy Constructor
     2. Assignment Operator Overload
     3. Destructor
 
 ---
 
-### `Static Memory Vs Heap Memory`
+### `Static_Memory_VS_Heap_Memory`
 
 **Static Memory:** Static Memory are those memory spaces that reserved by a compiler itself.  
 **Heap Memory:** Heap Memory is a memory space where user defined memory are stored.
 
-### `Shallow Copy VS Deep Copy`
+---
+
+### `Shallow_Copy_VS_Deep_Copy`
 
 There are two ways to copy values from one object to another.
 
@@ -324,3 +328,132 @@ Here⤴ compiler will take make a memory space according to the data type of c a
 ***`Attributes of any class will always takes different spaces for different objects. But functions will take common space for different objects. And during execution time the function will bound to the calling object.`***
 
 **So to deep copy we use Pointer.** If our class contains some pointers then the shallow copy will not work correctly.
+
+---
+
+### `Pointer`
+
+Spacial variable which stores addresses of variables.
+
+- It provides dynamic memory, dynamic array, Dynamic objects etc
+- Provides Heap memory
+
+#### `Local_Variable`
+
+int i;  
+i = 42;  
+ Here we're saying compiler that go to the static memory and there reserve a space for an integer, which is 4 bytes in 32-bit system. So the compiler will store 42 at a specific address in the static memory, and name that address to i as a user defined name. The compiler will generate a table, which we often call 'Memory Variable Table',  It may have two columns, in first one it will store user-defined name and in second column it will store RAM address.
+
+To display address of any variable we write AND operator beside the variable name, like this **&i** To store this variable we use pointer
+
+```C++
+int a = 1;
+int *b_ptr;
+b_ptr = $a;
+cout << &a << " " << b_ptr; // Should be same
+
+cout << &b_ptr; // Now it'll print address of b_ptr, which is not equal to b_ptr, which is address  of a, stored in b_ptr as a value.
+
+cout << *b_ptr; // Dereferencing operator // 1 // print the value on the address that stored in *b_ptr
+
+int c = *b_ptr; // Dereferencing operator
+cout << c; // 1
+
+```
+
+Here b_ptr is a special variable which store the address of the integer memory address.  
+
+*\* use for ***pointer declaration*** and **dereferencing**.*
+
+**Why we're using a pointer here? All this things we can do without using pointer.** Pointer needs in that situations where we have no way of creating a static memory, we utilize pointer. so for creating a dynamic memory during runtime we use pointer to store that address. like this.⤵ . Here we're not creating a static memory, we're just reserving 4 bytes of memory inside a heap memory, and store that address into a_ptr variable.  
+
+***ACTUAL POWER OF POINTER COMES TO PLAY WHEN WE'RE WORKING WITH DYNAMIC MEMORY.***
+
+```c++
+int *a_ptr = new int;
+```
+
+---
+
+`Lecture #13`
+
+```js
+int a[20];  // array
+int *a_ptr = &a;
+
+```
+
+`⤴ Here we are storing an address of an array in a pointer, Here the point is that in this pointer we cannot increase or decrease the size of pointer dynamically. Because the memory of integer type array is reserved by compiler, we're just storing that address in a pointer. So this is not an actual use case of Pointer.`  
+Till now we need any declared variable to initialize a pointer. As we're storing an address of any declared variable in a pointer. After that we're utilizing the pointer.
+
+*So, **How to use a Pointer without connecting with a declared ordinary variable? Here Dynamic Variable comes!!***
+
+---
+
+### Dynamic Variables
+
+Real power of pointer're utilized with Dynamic Variables without any identifiers. So we want to reserve a some memory space by self. So for that we use keyword **new**.
+
+The purpose of `new keyword` is that it will give us dynamic reserved memory in Heap. just like this
+
+```c++
+int *a_ptr = new int;
+```
+
+**new operator do two things:**
+
+1. Reserve memory in heap memory of type (int in this case -4byte)
+2. After creating memory, new operator will return newly created memory address.
+
+In other words, we can say **new operator is a special function which creates dynamic memory and return address of that memory.** As it's returning an address we should have to store in any pointer variable.
+
+```c++
+int *a_ptr = new int;
+double *b_ptr = new double;
+```
+
+`Remember:` To reserved any memory space in static memory we always need any identifier/variable, because it reserved by compiler.  
+Memory Variable Table[Identifier_Address](copy k last page)
+
+here⤴ for **a_ptr itself reserve a static variable in stack memory, which will hold the address of dynamic memory created by new operator according to size of dataType.** Note here, There's no identifier against newly created dynamic memory by using new operator. For static memory there will always identifier in MVT.  
+
+```cpp
+int *a_ptr = new int
+*a_ptr = 20;
+ 
+cout << *a_ptr << endl; // 20
+```
+
+**How this value(20) stored in the address of dynamic memory?** To store 20 in a memory the compiler will check there is any identifier named as a_ptr in MVT, if there is then jump to that address in static memory. And as we wrote \* before a_ptr, the compiler will check if the a_ptr that stored in static memory is a pointer, yes, then it'll jump to that address, which stored in static variable. which is dynamic memory location. and will write 20 in that location. This all happens due to \* dereferencing operator.
+
+Now we can delete this a_ptr memory during execution time.
+
+```cpp
+int *a_ptr = new int
+*a_ptr = 20;
+ 
+cout << *a_ptr << endl; // 20
+
+delete a_ptr; // it will delete the memory address from static memory, which is address of dynamic memory.
+cout << *a_ptr << endl; // garbage value // deleted
+
+int b = 20;
+delete b; // Error, reserved by compiler. and will delete by compiler
+
+
+```
+
+Count total memory of this⤴ program? So during compilation time there is a zero memory reserved for this code. reason for this that these memory will always reserved during execution time.  
+***"Compile-time memory allocation is generally associated with variables that have static storage duration (e.g., global variables, static variables). These variables are allocated memory at compile time and retain their memory throughout the program's execution. In the case of int b = 20;, the memory for b is managed dynamically during runtime, and no memory is reserved for it at compile time."****Chat-GPT*
+
+---
+
+### `Dynamic_Binding_And_Static_Binding`
+
+With the help of concept of dynamic memory during runtime we can create a memory and delete them.
+
+```cpp
+int a;
+int b;
+
+```
