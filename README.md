@@ -572,7 +572,30 @@ bag(){
 ```
 
 [Click_here_to_visualize_memory](https://pythontutor.com/visualize.html#mode=edit)
-![Visualize-Memory-SS](constructor-visualize.JPG)
+
+```cpp
+int main() {
+  int used=0;
+  int size=5;
+  int *data_ptr=new int[size]; 
+  data_ptr[2]=5;
+  data_ptr[4]=8;
+  return 0;
+}
+```
+
+`Visualization of this code⤴`  
+![Visualize-Memory-SS] (constructor-visualize.JPG)
+
+---
+We know that integer take 4 bytes, For pointer we need 8-bytes if system is 64-bit operating system. **The Question is what about a class? When we declare an object out of class then how much memory space will be allocated to that object?**  
+For a simple class, I will depends on attributes in the class. In our case 4-bytes for size, 8-bytes for pointer(*data_ptr) and 4-bytes for used. so total size of our bag object will be 16-bytes. Remember here this 16-bytes is during compile time not during run time. So In stack there will be 16-bytes reserved. If we calculate both heap and stack then it may be 16 + (4 \* 5); size is 5  
+
+```cpp
+bag b1; // 16-bytes memory, during compile time // Total = 16 + (4 * 5)
+```
+
+`Remember:` Normal variable will always depends on what is the data-type of the variable, while pointer will depends on system-architecture(OS).
 
 ---
 
@@ -583,14 +606,16 @@ using namespace std;
 class bag{
   private:
     int size; // initial size of the bag
-    int *data_ptr; // pointer to array(1st index), located in heap
+    int *data; // pointer to array(1st index), located in heap
     int used=0; // used array
 
 
   public:
     // constructor
     bag(){
-      used = 0;
+      int used=0;
+      int size=5;
+      int *data_ptr=new int[size]; 
     } 
 
     bool insert(int value){
@@ -705,9 +730,7 @@ int main(){
   }else{
     cout << "Bag is full" << endl;
   }
-
-
-
+  
   return 0;
 }
 
