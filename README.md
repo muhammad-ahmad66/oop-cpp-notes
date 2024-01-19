@@ -585,7 +585,7 @@ int main() {
 ```
 
 `Visualization of this code⤴`  
-![Visualize-Memory-SS] (constructor-visualize.JPG)
+![Visualize-Memory-SS](constructor-visualize.JPG)
 
 ---
 We know that integer take 4 bytes, For pointer we need 8-bytes if system is 64-bit operating system. **The Question is what about a class? When we declare an object out of class then how much memory space will be allocated to that object?**  
@@ -730,7 +730,7 @@ int main(){
   }else{
     cout << "Bag is full" << endl;
   }
-  
+
   return 0;
 }
 
