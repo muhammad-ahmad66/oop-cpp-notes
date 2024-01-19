@@ -572,7 +572,7 @@ bag(){
 ```
 
 [Click_here_to_visualize_memory](https://pythontutor.com/visualize.html#mode=edit)
-[!screen-shod](constructor-visualize.JPG)
+![Visualize-Memory-SS](constructor-visualize.JPG)
 
 ---
 
