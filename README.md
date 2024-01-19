@@ -186,10 +186,10 @@ We'll convert this static bag into a dynamic bag with the help of pointer.
 
 ### `Operator_Overloading`
 
-let's say we want to add(combine) two bag objects, basically we want merge two bags. We will combine the two bag objects and store the result in third bag. **bag b3=b+b2;** Here compiler error. because it will expect integers before and after addition operator. Because of we haven't, yet overloaded any operator.  
-Now to add two bags, compiler shouldn't use the default + operator, Instead we'll built our own addition operator.
+Let's say we want to add(combine) two bag objects, we want to merge two bags. We will combine the two bag objects and store the result in third bag. **bag b3=b+b2;** Here compiler error. because it will expect integers before and after the addition operator. Because we haven't, yet overloaded any operator.  
+Now to add two bags, the compiler shouldn't use the default + operator, Instead we'll build our own addition operator.
 
-The compiler will convert this statement **b3=b+b;** into **b.operator+(b)** So here b is a calling object and b is a parameter object into operator+ function. As we know **we can access attributes of calling object directly in a functions of class** just like we did. And to access b we will pass as a parameter.
+The compiler will convert this statement **b3=b+b;** into **b.operator+(b)** So here b is a calling object and b is a parameter object in the operator+ function. As we know **we can access attributes of calling object directly in a functions of class** just like we did. And to access b we will pass as a parameter.
 
 ```  c++
 
