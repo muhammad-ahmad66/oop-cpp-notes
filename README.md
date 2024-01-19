@@ -26,7 +26,7 @@ Sir Mohsin Ansari
 - We can check the **size** of the bag.
 - We can **remove** a number from a bag. But we remove only one number at a time.
 
-**Why need pointers for pag?**  
+**Why need pointers for bag?**  
 If the size of your bag is not known at compile time or if it changes dynamically during program execution, using pointers allows you to allocate memory on the heap using new. This can be useful when you want to manage memory more flexibly.  
 Pointers can be assigned a null value (nullptr), allowing us to represent the absence of an object in the bag.
 
@@ -390,7 +390,7 @@ Till now we need any declared variable to initialize a pointer. As we're storing
 
 ---
 
-### Dynamic Variables
+### `Dynamic Variables`
 
 Real power of pointer're utilized with Dynamic Variables without any identifiers. So we want to reserve a some memory space by self. So for that we use keyword **new**.
 
@@ -444,7 +444,7 @@ delete b; // Error, reserved by compiler. and will delete by compiler
 ```
 
 Count total memory of this⤴ program? So during compilation time there is a zero memory reserved for this code. reason for this that these memory will always reserved during execution time.  
-***"Compile-time memory allocation is generally associated with variables that have static storage duration (e.g., global variables, static variables). These variables are allocated memory at compile time and retain their memory throughout the program's execution. In the case of int b = 20;, the memory for b is managed dynamically during runtime, and no memory is reserved for it at compile time."****Chat-GPT*
+***"Compile-time memory allocation is generally associated with variables that have static storage duration (e.g., global variables, static variables). These variables are allocated memory at compile time and retain their memory throughout the program's execution. In the case of int b = 20;, the memory for b is managed dynamically during runtime, and no memory is reserved for it at compile time."*** *Chat-GPT*
 
 ---
 
@@ -599,6 +599,60 @@ bag b1; // 16-bytes memory, during compile time // Total = 16 + (4 * 5)
 
 ---
 
+`Lecture #17`
+
+Now at this point we can not add number of elements greater then 5, because we set initial size to 5. Although we created a dynamic array but till now there is no way to increase the array size, because we don't yet implemented reserve() function.
+
+To increase the size dynamically, we can do is... When the used-size of an array is equal to initial size, then it's mean the array is already full, so we will add a function there, to increase the size of the array during runtime. We'll increase the size of the array by one, each time when a user wants to add new element. To increase the size of array, we use same logic and code that we wrote in previous lecture.  
+
+Before adding reserve function we need to add destructor function, because we're creating a dynamic memory, so memory in heap, so we should've to delete that memory from heap. **To define destructure we use Tilde(~) sign before name, and the name will always name of class just like constructor. The constructor will call when object is created, and the destructor will call when object is destroyed or goes out of scope. Destructor will simply free all dynamic spaces.** If we don't specify the destructor function, then by default the one destructor function will be added to the class just like default constructor. **We can overload constructor but in case of destructor we cannot overload.** There will be only one destructor function, but still we can pass parameter to destructor. Most of the cased just use destructor function for delete dynamic memory that we created in class.  
+**When Destructor is called?** Whenever any object is going to out of scope.
+
+```cpp
+// Destructor Function
+~bag(){
+  delete [] data;
+}
+```
+
+---
+
+#### `Implementing Reserve Function`
+
+```cpp
+void reserve(int capacity){
+  int *temp=new int[size+capacity];
+
+  for(int i=0;i<used; i++){
+    temp[i]=data[i];
+  }
+
+  delete [] data;
+
+  data=temp;
+  size=size+capacity;
+}
+
+bool insert(int value){
+  if(used==size){ // full
+    reserve(size++); // 5+1 = 6
+  }
+}
+
+```
+
+In this function data and temp both are pointing to the same address in heap. But one very big difference is that **data is a class variable/attribute while temp is a local variable to this reserve function**, so it'll destroy as soon as returned from the function. By the way this function(reserve function) has two local variables, 1-temp, 2-capacity, which is parameter.
+
+To decrease the size of dynamic array we just call the reserve function by using size -1
+
+```cpp
+reserve(size-1); // see remove function⤵.
+```
+
+---
+
+`Final Code`
+
 ```cpp
 #include <iostream>
 using namespace std;
@@ -618,15 +672,27 @@ class bag{
       int *data_ptr=new int[size]; 
     } 
 
-    bool insert(int value){
-      if(used==20){
+    void reserve(int capacity){
+      int *temp=new int[capacity];
 
-        return 0;
-      }else{
-        data[used]=value;
-        used++;
-        return 1;
+      for(int i=0;i<used; i++){
+        temp[i]=data[i];
       }
+
+      delete [] data;
+
+      data=temp;
+      size=capacity;
+    }
+
+    bool insert(int value){
+      if(used==size){ // full
+      reserve(size + 1); // 5+1 = 6
+     } 
+      data[used]=value;
+      used++;
+      return 1;
+    
     }
 
     int bagSize(){
@@ -682,6 +748,8 @@ class bag{
           return 1;
         }
       }
+
+      reserve(size-1);
       return 0;
     }
 
@@ -725,11 +793,11 @@ int main(){
 
   bag b;
 
-  if(b.insert(4)){
-    cout << "Data successfully Inserted" << endl;
-  }else{
-    cout << "Bag is full" << endl;
-  }
+  b.insert(20);
+  b.insert(10);
+  b.insert(22);
+  b.insert(11);
+  b.insert(9);
 
   return 0;
 }
