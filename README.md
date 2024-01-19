@@ -546,3 +546,169 @@ return 0;
 ***`Dynamic memory always depends upon our system's RAM.`***
 
 ---
+
+`Lecture  #15`
+
+Now convert our static bag class to dynamic bag.  
+To convert we need changes in constructor, insert function, remove function etc.  
+In insert function, During insertion if the initial size of the bag is full then, we should increase the size of the bag, to do that we will create a new function, that will increase the size of the bag, and then in insert function we'll call that function. So after the bag is fulled, when user wants to insert new element, we just increase the size of the bag by one each time.
+
+```cpp
+if(bag.isFull()){
+  reserve(size++);
+}
+```
+
+### `Constructor for Dynamic bag`
+
+First we start with implementing constructor. When ever an object is declared the constructor will called.
+
+```cpp
+bag(){
+  used=0;
+  size=5; // this is just the initial size, now we can increase/decrease during run time.
+  data_ptr=new int[size]; // Reserve a space of given size in dynamic memory and sendBack the address of first element, and store into data_ptr
+}
+```
+
+[Click_here_to_visualize_memory](https://pythontutor.com/visualize.html#mode=edit)
+[!screen-shod](constructor-visualize.JPG)
+
+---
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class bag{
+  private:
+    int size; // initial size of the bag
+    int *data_ptr; // pointer to array(1st index), located in heap
+    int used=0; // used array
+
+
+  public:
+    // constructor
+    bag(){
+      used = 0;
+    } 
+
+    bool insert(int value){
+      if(used==20){
+
+        return 0;
+      }else{
+        data[used]=value;
+        used++;
+        return 1;
+      }
+    }
+
+    int bagSize(){
+      return used;
+    }
+
+    void clear(){
+      used = 0;
+    }
+
+    bool checkValInBag(int value){
+      if(used == 0){
+        cout<< "Not found As bag is empty.";
+        return 0;
+      }else{
+        for(int i=0;i<used;i++){
+          if(value==data[i]){
+            cout <<value << " Has been found at index " << i << endl;
+            return 1;
+          }
+        }
+        cout<< "Not found.";
+        return 0;  
+      }
+    }
+
+    // Occurrences of a specified number in array.
+    int howMany(int value){
+      if (used == 0){
+        cout<<"Bag is empty."
+        return 0;
+      }
+      int count = 0;
+      for(int i=0;i<used;i++){
+        if(value == data[i]){
+          count++;
+        }
+      }
+      return count;
+    }
+
+    // To remove first swap with last element and then next--
+    bool remove(int value){
+      if(used == 0){
+        cout << "bag empty";
+        return 0;
+      }
+
+      for (int i = 0; i < used; i++){
+        if (data[i] == value){
+          data[i] = data[used - 1];
+          used--;
+          return 1;
+        }
+      }
+      return 0;
+    }
+
+    bool removeDuplicate(int value){
+       if(used == 0){
+        cout << "bag empty";
+        return 0;
+      }
+
+      for (int i = 0; i < used; i++){
+        if (data[i] == value){
+
+          if(data[used-1]==value){
+            used--;
+            i--;
+          }else{
+          data[i] = data[used - 1];
+          used--;
+          }
+        }
+      }
+      return 1;
+    }
+
+  /* 
+    bool checkDuplicate();
+  */
+
+    void display() {
+      if(used == 0){
+        cout << "Bag is empty" << endl;
+      } else {
+         for(int i = 0; i < used; i++){
+          cout << data[i] << endl;
+         }
+      }
+    }
+}
+
+int main(){
+
+  bag b;
+
+  if(b.insert(4)){
+    cout << "Data successfully Inserted" << endl;
+  }else{
+    cout << "Bag is full" << endl;
+  }
+
+
+
+  return 0;
+}
+
+```
