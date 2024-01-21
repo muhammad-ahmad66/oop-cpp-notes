@@ -3,6 +3,8 @@
 Sir Mohsin Ansari  
 [Lecture-10-end Container Classes](https://www.youtube.com/watch?v=qpcpjy7G5yw&list=PL0OILbU3zRoDJo6H9WS1vEfBzlEZQKJD1&index=12)
 
+## `NOTE: Bag Class is not important at all. All we are concerned with is to understand the concept of dynamic class and static class`
+
 ---
 
 ## `Table of Contents`
